@@ -13,12 +13,17 @@ public class LoginService {
 	@Autowired
 	UserCrudRepo userCrudRepo;
 	
+	Long currUserId;
+	
+	private UserEntity currUser;
+	
 	public boolean searchID(Long userId) {
 		Iterable<UserEntity> users = userCrudRepo.findAll();
 		
 		for (UserEntity user : users) {
 			if(user.getId().equals(userId)) {
-				
+				currUserId= userId;
+				userCrudRepo.delete(user);;
 				return true;
 			}
 		}
@@ -26,6 +31,7 @@ public class LoginService {
  }
 	public void updateUser(String name, String password) {
 		UserEntity newUser = new UserEntity();
+		newUser.setId(currUserId);
 		newUser.setName(name);
 		newUser.setPassword(password);
 
